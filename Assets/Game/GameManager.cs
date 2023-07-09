@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         TravelSpeed = 1f + Score / 10f;
         _roadManager.TimeToNextObstacle = 10f - Score / 50f;
         _enemyManager.TimeUntilNextSpawn = 8f - Score / 50f;
-        _enemyManager.EnemiesPerSpawn = 3 + Mathf.FloorToInt(Score / 10f);
+        _enemyManager.EnemiesPerSpawn = 3 + Mathf.FloorToInt(Score / 40f);
     }
 
     public void Die() {
