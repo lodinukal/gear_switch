@@ -18,10 +18,28 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private TMPro.TextMeshProUGUI _healthText;
 
+    [SerializeField]
+    private Animator _animator;
+
+    private Collider2D _collider;
+    [SerializeField]
+    private Collider2D _attackCollider;
+
+    [SerializeField]
+    private AudioSource _audioSource;
+    [SerializeField]
+    private AudioClip _attackSound;
+    [SerializeField]
+    private AudioClip _hitSound;
+
+    public float AttackDamage = 1f;
+    public float AttackInterval = 1f;
+    private float _attackTimer = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        _collider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -44,14 +62,34 @@ public class Enemy : MonoBehaviour
             _healthBarFill.fillAmount = Health / MaxHealth;
             _healthText.text = $"{Health}/{MaxHealth}";
         }
+
+        var attack = ShouldAttack();
+        Attacking(attack);
     }
 
     public void Damage(float damage)
     {
         Health -= damage;
+        _audioSource.PlayOneShot(_hitSound);
         if (Health <= 0)
         {
             Destroy(gameObject);
         }
+    }
+
+    public void HitVan()
+    {
+        Van.Damage(AttackDamage);
+        _audioSource.PlayOneShot(_attackSound);
+    }
+
+    public bool ShouldAttack()
+    {
+        return _attackCollider.IsTouching(Van.VanCollider);
+    }
+
+    public void Attacking(bool isAttacking)
+    {
+        _animator.SetBool("IsAttacking", isAttacking);
     }
 }

@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private VanManager _vanManager;
     [SerializeField] private RoadManager _roadManager;
+    [SerializeField] private EnemyManager _enemyManager;
 
     [SerializeField] private Ephemeral _eph;
     [SerializeField] private GameObject _itsSoOver;
@@ -39,6 +40,8 @@ public class GameManager : MonoBehaviour
         Score += Time.deltaTime;
         TravelSpeed = 1f + Score / 10f;
         _roadManager.TimeToNextObstacle = 10f - Score / 50f;
+        _enemyManager.TimeUntilNextSpawn = 8f - Score / 50f;
+        _enemyManager.EnemiesPerSpawn = 3 + Mathf.FloorToInt(Score / 10f);
     }
 
     public void Die() {

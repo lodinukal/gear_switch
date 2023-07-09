@@ -1260,6 +1260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _vanManager: {fileID: 1944218663}
   _roadManager: {fileID: 1983413375}
+  _enemyManager: {fileID: 1078762134}
   _eph: {fileID: 1451667060}
   _itsSoOver: {fileID: 325375255}
   TravelSpeed: 20

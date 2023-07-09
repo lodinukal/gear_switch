@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class VanState {
+public class VanState
+{
     public VanState(float health, float maxHealth, float fuel)
     {
         this.Health = health;
@@ -65,9 +66,23 @@ public class VanManager : MonoBehaviour
     private System.Type _setType;
     private int _viewIndex = 0;
 
-    public Van Van { get { return _van; } } 
+    private Collider2D _cachedCollider;
+
+    public Van Van { get { return _van; } }
     public VanState State { get { return _state; } }
     public string ViewName { get { return _currentView.GetName(); } }
+    public Collider2D VanCollider
+    {
+        get
+        {
+            if (_cachedCollider)
+            {
+                return _cachedCollider;
+            }
+            _cachedCollider = _van.GetComponent<Collider2D>();
+            return _cachedCollider;
+        }
+    }
 
     [SerializeField]
     private Shake _shaker;
@@ -77,7 +92,8 @@ public class VanManager : MonoBehaviour
 
     public UnityEvent OnGameOver;
 
-    void Awake() {
+    void Awake()
+    {
         OnGameOver = new UnityEvent();
     }
 
@@ -87,7 +103,7 @@ public class VanManager : MonoBehaviour
         _createdVan = Instantiate(_vanPrefab, transform);
         _createdVan.GetComponent<Van>().Manager = this;
         _van = _createdVan.GetComponent<Van>();
-        _state = new VanState(10f, 10f, 10f);
+        _state = new VanState(30f, 30f, 10f);
         ChangeView = new ViewChangeEvent();
         foreach (var view in _views)
         {
@@ -121,7 +137,8 @@ public class VanManager : MonoBehaviour
         ProcessViewChange();
     }
 
-    public void CycleView() {
+    public void CycleView()
+    {
         _viewIndex = (_viewIndex + 1) % _views.Count;
         _setType = _views[_viewIndex].Type;
     }
@@ -131,7 +148,8 @@ public class VanManager : MonoBehaviour
         _setType = type;
     }
 
-    void ProcessViewChange() {
+    void ProcessViewChange()
+    {
         if (_setType == null)
         {
             return;
@@ -156,7 +174,6 @@ public class VanManager : MonoBehaviour
     public void Damage(float amount)
     {
         _state.Health -= amount;
-        Debug.Log("Health: " + _state.Health);
         _damagedSound.PlayOneShot(_damagedSound.clip);
         _shaker.TriggerShake();
         if (_state.Health <= 0)
